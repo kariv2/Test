@@ -30,7 +30,7 @@
       background: radial-gradient(circle at 45% 45%, #181d28 0%, #0d1017 55%, #040508 100%);
     }
 
-    /* 2. VINTAGE 16MM FILM GRAIN & AMBER VIGNETTE */
+    /* 2. VINTAGE 16MM FILM GRAIN & VIGNETTE */
     #film-overlay {
       position: fixed;
       inset: 0;
@@ -118,7 +118,7 @@
     }
 
     /* ==========================================================
-       4. 100% UNFAILING START SCREEN (DIRECT TAP SUPPORT)
+       4. 100% RELIABLE START SCREEN
        ========================================================== */
     #start-screen {
       position: fixed !important;
@@ -164,31 +164,12 @@
     }
     #start-btn:active { transform: scale(0.96); }
 
-    .upload-container {
-      position: relative;
-      width: 100%;
-      padding: 12px 20px;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      color: #94a3b8;
-      background: rgba(20, 26, 38, 0.6);
-      border: 1px dashed rgba(148, 163, 184, 0.4);
-      border-radius: 25px;
-      text-align: center;
-      overflow: hidden;
-    }
-    .upload-container input[type="file"] {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      opacity: 0;
-      cursor: pointer;
-    }
-
     .subtitle {
       margin-top: 14px;
-      opacity: 0.6;
-      font-size: 13px;
+      opacity: 0.75;
+      font-size: 13.5px;
       font-family: 'Inter', sans-serif;
+      color: #94a3b8;
     }
 
     #song-player {
@@ -203,17 +184,13 @@
 </head>
 <body onclick="startExperience()">
 
-  <!-- Media Player with your uploaded mp4 files -->
-  <video id="song-player" playsinline webkit-playsinline loop preload="auto">
-    <source src="snaptik_7635591509277986068_v3.mp4" type="video/mp4">
-    <source src="aboutyou.mp4" type="video/mp4">
-    <source src="music.mp4" type="video/mp4">
-  </video>
+  <!-- Media Player: Auto-connected by the script below -->
+  <video id="song-player" playsinline webkit-playsinline loop preload="auto"></video>
 
   <div class="letterbox lb-top"></div>
   <div class="letterbox lb-bottom"></div>
 
-  <!-- Canvas Scene: Solitary Victorian Lamppost & Heavy Snow -->
+  <!-- Canvas Scene: Solitary Streetlamp & Heavy Snow -->
   <canvas id="snow-canvas"></canvas>
   <div id="film-overlay"></div>
   <div id="film-grain"></div>
@@ -223,24 +200,88 @@
     <div class="lyric-box" id="lyric-box"></div>
   </div>
 
-  <!-- Start Screen with direct inline click and touch handlers -->
+  <!-- Start Screen -->
   <div id="start-screen" onclick="startExperience()">
     <div class="btn-group" onclick="event.stopPropagation()">
       <button id="start-btn" onclick="startExperience()" ontouchend="startExperience()">
         ▶ play winter night
       </button>
-      <div class="upload-container">
-        <span id="upload-label">📁 or choose video from iPad</span>
-        <input type="file" id="media-input" accept="video/*,audio/*" onchange="handleMediaUpload(this)">
-      </div>
     </div>
-    <p class="subtitle" id="status-text">(tap button or anywhere to start)</p>
+    <p class="subtitle" id="status-text">⏳ scanning your GitHub files for audio...</p>
   </div>
 
   <script>
     // ==============================================================
-    // 1. FAIL-SAFE START ENGINE (CANNOT FREEZE)
+    // 1. AUTO-DETECT ENGINE: AUTOMATICALLY FINDS YOUR MP4 IN GITHUB
     // ==============================================================
+    const player = document.getElementById('song-player');
+    const statusText = document.getElementById('status-text');
+
+    async function autoDetectMedia() {
+      // 1. Ask GitHub API what files exist in this repository
+      try {
+        const hostParts = window.location.hostname.split('.');
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const user = (hostParts.length > 2 && hostParts[1] === 'github') ? hostParts[0] : 'kariv2';
+        const repo = pathParts[0] || 'Ahnhem';
+
+        const res = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/`);
+        if (res.ok) {
+          const files = await res.json();
+          // Find any video or audio file currently in your repository
+          const found = files.find(f => f.type === 'file' && /\.(mp4|mov|m4a|mp3)$/i.test(f.name));
+          if (found) {
+            player.src = found.name;
+            player.load();
+            statusText.innerText = `✓ connected to "${found.name}"`;
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn("GitHub API check skipped, trying direct list:", err);
+      }
+
+      // 2. Direct fallback list
+      const candidates = [
+        'aboutyou.mp4',
+        'snaptik_7635591509277986068_v3.mp4',
+        'f12117c668798929d30d9a1344321ba7.mp4',
+        'music.mp4',
+        'video.mp4'
+      ];
+
+      for (const name of candidates) {
+        try {
+          const check = await fetch(name, { method: 'HEAD' });
+          if (check.ok) {
+            player.src = name;
+            player.load();
+            statusText.innerText = `✓ connected to "${name}"`;
+            return;
+          }
+        } catch (e) {}
+      }
+
+      player.src = candidates[0];
+      statusText.innerText = "(ready! tap to play with sound)";
+    }
+
+    autoDetectMedia();
+
+    // ==============================================================
+    // 2. TIMED LYRICS ("ABOUT YOU" - THE 1975)
+    // ==============================================================
+    const TIMED_LYRICS = [
+      { time: 0.2,  text: "we get married" },
+      { time: 2.4,  text: "we get married" },
+      { time: 4.8,  text: "we get married in our heads" },
+      { time: 10.4, text: "something to do while we try to recall how we met" },
+      { time: 20.2, text: "do you think i have forgotten?" },
+      { time: 25.2, text: "do you think i have forgotten?" },
+      { time: 30.2, text: "do you think i have forgotten" },
+      { time: 35.2, text: "do you think i have forgotten about you?" }
+    ];
+
     let hasStarted = false;
     let syncTimer = null;
     let lastRenderedLyric = -1;
@@ -252,7 +293,6 @@
       const screen = document.getElementById('start-screen');
       if (screen) screen.style.display = 'none';
 
-      const player = document.getElementById('song-player');
       player.muted = false;
       player.loop = true;
       player.play().catch(e => console.log("Audio waiting on gesture:", e));
@@ -278,31 +318,6 @@
         }
       }, 30);
     }
-
-    function handleMediaUpload(input) {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        const player = document.getElementById('song-player');
-        player.src = URL.createObjectURL(file);
-        player.load();
-        document.getElementById('upload-label').innerText = "✓ video connected!";
-        document.getElementById('status-text').innerText = "ready! tap play now.";
-      }
-    }
-
-    // ==============================================================
-    // 2. TIMED LYRICS ("ABOUT YOU" - THE 1975)
-    // ==============================================================
-    const TIMED_LYRICS = [
-      { time: 0.2,  text: "we get married" },
-      { time: 2.4,  text: "we get married" },
-      { time: 4.8,  text: "we get married in our heads" },
-      { time: 10.4, text: "something to do while we try to recall how we met" },
-      { time: 20.2, text: "do you think i have forgotten?" },
-      { time: 25.2, text: "do you think i have forgotten?" },
-      { time: 30.2, text: "do you think i have forgotten" },
-      { time: 35.2, text: "do you think i have forgotten about you?" }
-    ];
 
     function updateLyrics(time) {
       const box = document.getElementById('lyric-box');
@@ -337,7 +352,6 @@
     }
 
     function initScene() {
-      // Lonely streetlamp bokeh
       bokehs = [];
       const colors = ['rgba(235, 185, 120, ', 'rgba(180, 195, 220, ', 'rgba(210, 160, 90, '];
       for (let i = 0; i < 16; i++) {
@@ -352,7 +366,6 @@
         });
       }
 
-      // Slow sorrowful snowfall
       snowflakes = [];
       for (let i = 0; i < Math.floor(width * 0.3); i++) {
         snowflakes.push({
@@ -366,7 +379,6 @@
         });
       }
 
-      // Huge blurry foreground bokeh flakes
       foregroundBokehFlakes = [];
       for (let i = 0; i < 14; i++) {
         foregroundBokehFlakes.push({
@@ -383,7 +395,7 @@
     function drawScene() {
       ctx.clearRect(0, 0, width, height);
 
-      // Lamppost light cone
+      // Lamppost Light Cone
       const lampX = width * 0.25;
       const lampGrad = ctx.createRadialGradient(lampX, height * 0.35, 10, lampX, height * 0.55, 240);
       lampGrad.addColorStop(0, 'rgba(255, 215, 140, 0.28)');
@@ -396,7 +408,7 @@
       ctx.fillRect(lampX - 3, height * 0.35, 6, height * 0.65);
       ctx.fillRect(lampX - 14, height * 0.33, 28, 12);
 
-      // Soft bokeh
+      // Soft Streetlamp Bokeh
       bokehs.forEach(b => {
         b.x += b.dx;
         b.p += 0.012;
@@ -412,7 +424,7 @@
         if (b.x > width + b.r) b.x = -b.r;
       });
 
-      // Regular Snow
+      // Snowflakes
       snowflakes.forEach(s => {
         s.sw += 0.018;
         s.y += s.s;
