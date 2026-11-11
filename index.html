@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>About You - The 1975</title>
-  <!-- Google Fonts for Modern Minimalist Aesthetic -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -16,26 +15,74 @@
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      background-color: #120d08;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #0b0704;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       user-select: none;
       -webkit-user-select: none;
     }
 
-    /* 1. HTML5 CANVAS: WARM GOLDEN NIGHT & MULTI-LAYER SNOW */
-    #snow-canvas {
+    /* ==========================================================
+       1. CHANGING WINTER BACKGROUND SCENES (SMOOTH CROSSFADES)
+       ========================================================== */
+    .scene-layer {
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1.6s ease-in-out;
       z-index: 1;
-      background: radial-gradient(circle at 50% 65%, #2e2012 0%, #150f08 60%, #0a0704 100%);
+      pointer-events: none;
+    }
+    .scene-layer.active {
+      opacity: 1;
     }
 
-    /* 2. VINTAGE NOSTALGIC FILM GRAIN & AMBER VIGNETTE */
+    /* Scene 1: Amber Streetlamp & Bare Trees (0:00 - 0:08) */
+    #scene-1 {
+      background: radial-gradient(circle at 60% 70%, #3a2210 0%, #170e06 60%, #080502 100%);
+    }
+
+    /* Scene 2: Pine Tree in Deep Snow (0:08 - 0:19) */
+    #scene-2 {
+      background: radial-gradient(circle at 35% 55%, #2a1c0e 0%, #120d07 55%, #060402 100%);
+    }
+
+    /* Scene 3: Snowy Sidewalk Night Walk (0:19 - 0:21) */
+    #scene-3 {
+      background: radial-gradient(circle at 50% 45%, #23160a 0%, #0d0904 60%, #040301 100%);
+    }
+
+    /* Scene 4: Cozy Window with Stars & Warm Room Lamp (0:21 - 0:34) */
+    #scene-4 {
+      background: radial-gradient(circle at 50% 40%, #4a2c14 0%, #1f1106 50%, #0a0502 100%);
+    }
+
+    /* Scene 5: City Street Wrapped in Fairy Lights (0:35 - 0:39) */
+    #scene-5 {
+      background: radial-gradient(circle at 45% 60%, #3e2612 0%, #1a1006 55%, #070402 100%);
+    }
+
+    /* Background Silhouette Elements (SVG) */
+    .scene-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    /* 2. MULTI-LAYER FALLING SNOW CANVAS */
+    #snow-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw; height: 100vh;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* 3. VINTAGE GRAIN & AMBER VIGNETTE */
     #film-overlay {
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(255, 180, 80, 0.08) 0%, rgba(20, 12, 5, 0.65) 100%);
+      background: radial-gradient(circle at 50% 50%, rgba(255, 175, 75, 0.08) 0%, rgba(15, 8, 3, 0.65) 100%);
       pointer-events: none;
       z-index: 10;
     }
@@ -56,7 +103,7 @@
       100% { opacity: 0.13; }
     }
 
-    /* 3. MINIMALIST CENTERED WHITE TYPOGRAPHY */
+    /* 4. CENTERED MINIMALIST TYPOGRAPHY */
     #lyric-container {
       position: fixed;
       inset: 0;
@@ -77,16 +124,13 @@
 
     .lyric-text {
       color: #ffffff;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', -apple-system, sans-serif;
       font-size: clamp(20px, 3.2vw, 32px);
       font-weight: 400;
       line-height: 1.5;
       letter-spacing: -0.015em;
       text-align: center;
-      /* Soft drop-shadow for contrast over bright snow spots */
-      text-shadow: 
-        0 2px 14px rgba(0, 0, 0, 0.85),
-        0 0 20px rgba(0, 0, 0, 0.6);
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 0, 0, 0.6);
       opacity: 0;
       transform: scale(0.97);
       animation: lyricFade 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -94,21 +138,15 @@
     }
 
     @keyframes lyricFade {
-      0% {
-        opacity: 0;
-        transform: scale(0.96) translateY(4px);
-      }
-      100% {
-        opacity: 0.96;
-        transform: scale(1) translateY(0);
-      }
+      0% { opacity: 0; transform: scale(0.96) translateY(4px); }
+      100% { opacity: 0.96; transform: scale(1) translateY(0); }
     }
 
-    /* 4. TAPPABLE START OVERLAY (IPAD SAFARI COMPLIANT) */
+    /* 5. START OVERLAY */
     #start-screen {
       position: fixed !important;
       inset: 0 !important;
-      background: rgba(14, 10, 6, 0.92) !important;
+      background: rgba(14, 10, 6, 0.94) !important;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       display: flex;
@@ -135,7 +173,6 @@
       font-family: 'Inter', sans-serif;
       font-size: 17px;
       font-weight: 500;
-      letter-spacing: -0.01em;
       background: linear-gradient(135deg, #e6a86c, #c97d3b);
       color: #1a0f05;
       border: 1px solid rgba(255, 235, 210, 0.85);
@@ -185,18 +222,82 @@
 </head>
 <body>
 
-  <!-- Hidden Looping Audio/Video Player -->
+  <!-- Media Player: Plays aboutyou.mp4 or video uploaded to repo -->
   <video id="song-player" playsinline webkit-playsinline loop preload="auto">
+    <source src="aboutyou.mp4" type="video/mp4">
     <source src="winter.mp4" type="video/mp4">
     <source src="snaptik_7635591509277986068_v3.mp4" type="video/mp4">
   </video>
 
-  <!-- Canvas for Snowy Bokeh Scene -->
+  <!-- ============================================================== -->
+  <!-- 5 CHANGING COZY WINTER SCENES (CROSSFADES WITH THE SONG)       -->
+  <!-- ============================================================== -->
+  <!-- Scene 1: Amber Streetlamp & Bare Trees (0:00 - 0:08) -->
+  <div class="scene-layer active" id="scene-1">
+    <svg class="scene-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+      <!-- Bare tree silhouette -->
+      <path d="M 220,600 C 230,420 240,300 250,220 C 260,180 280,120 320,60 M 250,220 C 220,180 180,130 140,80 M 240,300 C 190,260 160,200 120,160" stroke="#060402" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <ellipse cx="620" cy="420" rx="400" ry="80" fill="#1b120a" opacity="0.6"/>
+    </svg>
+  </div>
+
+  <!-- Scene 2: Pine Tree in Deep Snow (0:08 - 0:19) -->
+  <div class="scene-layer" id="scene-2">
+    <svg class="scene-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+      <!-- Pine tree covered in snow -->
+      <path d="M 180,550 L 260,550 L 260,600 L 180,600 Z M 220,100 L 120,240 L 160,240 L 90,360 L 140,360 L 60,500 L 380,500 L 300,360 L 350,360 L 280,240 L 320,240 Z" fill="#050302"/>
+      <ellipse cx="220" cy="520" rx="220" ry="40" fill="#1a1107" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <!-- Scene 3: Snowy Sidewalk Night Walk (0:19 - 0:21) -->
+  <div class="scene-layer" id="scene-3">
+    <svg class="scene-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+      <!-- Snowy road & two silhouettes walking -->
+      <path d="M 0,600 L 400,280 L 600,280 L 1000,600 Z" fill="#130c05"/>
+      <circle cx="490" cy="380" r="12" fill="#040201"/>
+      <path d="M 478,392 L 502,392 L 506,450 L 474,450 Z" fill="#040201"/>
+      <circle cx="518" cy="385" r="11" fill="#040201"/>
+      <path d="M 508,396 L 528,396 L 532,450 L 504,450 Z" fill="#040201"/>
+    </svg>
+  </div>
+
+  <!-- Scene 4: Cozy Window with Stars & Warm Room Lamp (0:21 - 0:34) -->
+  <div class="scene-layer" id="scene-4">
+    <svg class="scene-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+      <!-- Window frame -->
+      <rect x="250" y="60" width="500" height="480" rx="8" fill="none" stroke="#080502" stroke-width="24"/>
+      <line x1="500" y1="60" x2="500" y2="540" stroke="#080502" stroke-width="16"/>
+      <line x1="250" y1="220" x2="750" y2="220" stroke="#080502" stroke-width="12"/>
+      <line x1="250" y1="380" x2="750" y2="380" stroke="#080502" stroke-width="12"/>
+      <!-- Paper star stickers on window glass -->
+      <polygon points="370,120 376,138 395,138 380,149 385,167 370,156 355,167 360,149 345,138 364,138" fill="#ffd599" opacity="0.85"/>
+      <polygon points="630,280 635,295 650,295 638,304 642,318 630,309 618,318 622,304 610,295 625,295" fill="#ffd599" opacity="0.85"/>
+      <polygon points="350,440 355,455 370,455 358,464 362,478 350,469 338,478 342,464 330,455 345,455" fill="#ffd599" opacity="0.85"/>
+    </svg>
+  </div>
+
+  <!-- Scene 5: City Street Wrapped in Fairy Lights (0:35 - 0:39) -->
+  <div class="scene-layer" id="scene-5">
+    <svg class="scene-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+      <!-- Trees with glowing fairy string lights -->
+      <path d="M 150,600 L 170,250 M 850,600 L 830,250" stroke="#060301" stroke-width="18"/>
+      <!-- Sparkling fairy dots -->
+      <circle cx="160" cy="320" r="4" fill="#ffe099" filter="drop-shadow(0 0 6px #ffb347)"/>
+      <circle cx="190" cy="280" r="3.5" fill="#ffe099" filter="drop-shadow(0 0 6px #ffb347)"/>
+      <circle cx="140" cy="240" r="4" fill="#ffe099" filter="drop-shadow(0 0 6px #ffb347)"/>
+      <circle cx="840" cy="310" r="4" fill="#ffe099" filter="drop-shadow(0 0 6px #ffb347)"/>
+      <circle cx="810" cy="270" r="3.5" fill="#ffe099" filter="drop-shadow(0 0 6px #ffb347)"/>
+      <circle cx="860" cy="230" r="4" fill="#ffe099" filter="drop-shadow(0 0 6px #ffb347)"/>
+    </svg>
+  </div>
+
+  <!-- Snow Canvas -->
   <canvas id="snow-canvas"></canvas>
   <div id="film-overlay"></div>
   <div id="film-grain"></div>
 
-  <!-- Center Minimalist Lyrics -->
+  <!-- Minimalist Typography -->
   <div id="lyric-container">
     <div class="lyric-box" id="lyric-box"></div>
   </div>
@@ -206,18 +307,18 @@
     <div class="btn-group">
       <button id="start-btn">▶ play winter night</button>
       
-      <!-- Pick this TikTok video clip directly if not yet uploaded -->
+      <!-- Pick video from iPad if not yet uploaded to GitHub -->
       <div class="upload-container">
-        <span id="upload-label">📁 choose video from iPad</span>
+        <span id="upload-label">📁 ជ្រើសរើសវីដេអូពី iPad</span>
         <input type="file" id="media-input" accept="video/*,audio/*" onchange="handleMediaUpload(this)">
       </div>
     </div>
-    <p class="subtitle" id="status-text">(turn sound up for music & snow)</p>
+    <p class="subtitle" id="status-text">(opens with music & changing winter scenes)</p>
   </div>
 
   <script>
     // ==============================================================
-    // 1. CANVAS: COZY GOLDEN AMBIENCE & MULTI-LAYER SNOW ENGINE
+    // 1. CANVAS: WARM GOLDEN AMBIENCE & HEAVY MULTI-LAYER SNOW
     // ==============================================================
     const canvas = document.getElementById('snow-canvas');
     const ctx = canvas.getContext('2d');
@@ -234,14 +335,8 @@
     }
 
     function initScene() {
-      // 1. Warm Streetlamp & Holiday Light Bokeh
       bokehs = [];
-      const bokehColors = [
-        'rgba(255, 195, 110, ', // Warm Amber Streetlamp
-        'rgba(255, 150, 60, ',  // Golden Lantern
-        'rgba(255, 220, 160, ', // Soft Warm White
-        'rgba(255, 120, 50, '   // Holiday Glow
-      ];
+      const bokehColors = ['rgba(255, 195, 110, ', 'rgba(255, 150, 60, ', 'rgba(255, 220, 160, '];
       for (let i = 0; i < 22; i++) {
         bokehs.push({
           x: Math.random() * width,
@@ -254,10 +349,8 @@
         });
       }
 
-      // 2. Regular Falling Snow (Midground & Background)
       snowflakes = [];
-      const snowCount = Math.floor(width * 0.35);
-      for (let i = 0; i < snowCount; i++) {
+      for (let i = 0; i < Math.floor(width * 0.35); i++) {
         snowflakes.push({
           x: Math.random() * width,
           y: Math.random() * height,
@@ -269,13 +362,13 @@
         });
       }
 
-      // 3. Huge Out-Of-Focus Foreground Bokeh Snowflakes (Just like video!)
+      // Large blurry foreground bokeh flakes
       foregroundBokehFlakes = [];
       for (let i = 0; i < 16; i++) {
         foregroundBokehFlakes.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          r: Math.random() * 26 + 14, // Large blurry discs
+          r: Math.random() * 26 + 14,
           speed: Math.random() * 3.5 + 2.5,
           wind: Math.random() * 1.2 + 0.3,
           alpha: Math.random() * 0.35 + 0.15
@@ -286,16 +379,14 @@
     function drawScene() {
       ctx.clearRect(0, 0, width, height);
 
-      // --- LAYER 1: WARM STREETLIGHT BOKEH GLOWS ---
+      // Bokeh lights
       bokehs.forEach(b => {
         b.x += b.drift;
         b.pulse += 0.015;
         const currentAlpha = b.alpha + Math.sin(b.pulse) * 0.06;
-
         const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
         grad.addColorStop(0, b.color + currentAlpha + ')');
         grad.addColorStop(1, b.color + '0)');
-
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
@@ -305,7 +396,7 @@
         if (b.x > width + b.r) b.x = -b.r;
       });
 
-      // --- LAYER 2: FALLING FLUFFY SNOWFLAKES ---
+      // Regular snow
       snowflakes.forEach(s => {
         s.swing += 0.02;
         s.y += s.speed;
@@ -316,31 +407,23 @@
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fill();
 
-        if (s.y > height) {
-          s.y = -s.r;
-          s.x = Math.random() * width;
-        }
+        if (s.y > height) { s.y = -s.r; s.x = Math.random() * width; }
       });
 
-      // --- LAYER 3: BLURRED FOREGROUND BOKEH FLAKES (CINEMATIC) ---
+      // Large foreground bokeh flakes
       foregroundBokehFlakes.forEach(f => {
         f.y += f.speed;
         f.x += f.wind;
-
         const grad = ctx.createRadialGradient(f.x, f.y, f.r * 0.2, f.x, f.y, f.r);
         grad.addColorStop(0, `rgba(255, 255, 255, ${f.alpha})`);
         grad.addColorStop(0.7, `rgba(255, 245, 230, ${f.alpha * 0.6})`);
         grad.addColorStop(1, 'rgba(255, 245, 230, 0)');
-
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
         ctx.fill();
 
-        if (f.y > height + f.r) {
-          f.y = -f.r;
-          f.x = Math.random() * width;
-        }
+        if (f.y > height + f.r) { f.y = -f.r; f.x = Math.random() * width; }
       });
 
       requestAnimationFrame(drawScene);
@@ -351,7 +434,18 @@
     drawScene();
 
     // ==============================================================
-    // 2. TIMED LYRICS ("ABOUT YOU" - THE 1975)
+    // 2. TIMED BACKGROUND SCENE SHIFTS (MATCHED TO VIDEO CUTS)
+    // ==============================================================
+    const SCENE_CUES = [
+      { time: 0.0,  id: 'scene-1' }, // Bare Trees & Amber Streetlamp
+      { time: 8.5,  id: 'scene-2' }, // Pine Tree in Deep Snow
+      { time: 19.0, id: 'scene-3' }, // Snowy Sidewalk Night Walk
+      { time: 21.0, id: 'scene-4' }, // Cozy Window with Stars & Lamp
+      { time: 35.0, id: 'scene-5' }  // City Street with Fairy Lights
+    ];
+
+    // ==============================================================
+    // 3. TIMED LYRICS ("ABOUT YOU" - THE 1975)
     // ==============================================================
     const TIMED_LYRICS = [
       { time: 0.1,  text: "we get married" },
@@ -366,9 +460,9 @@
 
     let hasStarted = false;
     let syncTimer = null;
-    let lastRenderedIndex = -1;
+    let lastRenderedLyric = -1;
+    let lastActiveScene = null;
 
-    // Direct iPad Video/Audio Picker Handler
     function handleMediaUpload(input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
@@ -384,17 +478,16 @@
       if (hasStarted) return;
       hasStarted = true;
 
-      const screen = document.getElementById('start-screen');
-      if (screen) screen.style.display = 'none';
+      document.getElementById('start-screen').style.display = 'none';
 
       const player = document.getElementById('song-player');
       player.muted = false;
       player.loop = true;
-      player.play().catch(e => console.log("Audio play gesture:", e));
+      player.play().catch(e => console.log("Audio play:", e));
 
       const clockStart = performance.now();
 
-      // Audio-synced timer (Runs every 30ms for zero drift)
+      // Real-time audio sync loop (30ms frequency)
       syncTimer = setInterval(() => {
         let curTime = 0;
         if (!player.paused && player.currentTime > 0) {
@@ -403,35 +496,53 @@
           curTime = (performance.now() - clockStart) / 1000;
         }
 
-        handleLyricsSync(curTime);
+        // 1. Shift Background Scenes with the Song Cuts
+        updateBackgroundScene(curTime);
 
-        // Loop after 39.5s
+        // 2. Display Lyrics in Sync
+        updateLyrics(curTime);
+
+        // Seamless Loop every 39.5s
         if (curTime >= 39.5) {
-          lastRenderedIndex = -1;
+          lastRenderedLyric = -1;
+          lastActiveScene = null;
           player.currentTime = 0;
           player.play().catch(() => {});
         }
       }, 30);
     }
 
-    function handleLyricsSync(currentTime) {
+    function updateBackgroundScene(time) {
+      let targetScene = SCENE_CUES[0].id;
+      for (let i = 0; i < SCENE_CUES.length; i++) {
+        if (time >= SCENE_CUES[i].time) {
+          targetScene = SCENE_CUES[i].id;
+        }
+      }
+
+      if (targetScene !== lastActiveScene) {
+        lastActiveScene = targetScene;
+        document.querySelectorAll('.scene-layer').forEach(el => el.classList.remove('active'));
+        const activeEl = document.getElementById(targetScene);
+        if (activeEl) activeEl.classList.add('active');
+      }
+    }
+
+    function updateLyrics(time) {
       const box = document.getElementById('lyric-box');
-      
-      // Find the current active lyric line
       let activeIndex = -1;
       for (let i = 0; i < TIMED_LYRICS.length; i++) {
-        if (currentTime >= TIMED_LYRICS[i].time) {
+        if (time >= TIMED_LYRICS[i].time) {
           activeIndex = i;
         }
       }
 
-      if (activeIndex !== -1 && activeIndex !== lastRenderedIndex) {
-        lastRenderedIndex = activeIndex;
+      if (activeIndex !== -1 && activeIndex !== lastRenderedLyric) {
+        lastRenderedLyric = activeIndex;
         box.innerHTML = `<div class="lyric-text">${TIMED_LYRICS[activeIndex].text}</div>`;
       }
     }
 
-    // Direct iPad Touch Event Listeners
     const startBtn = document.getElementById('start-btn');
     startBtn.addEventListener('click', startExperience);
     startBtn.addEventListener('touchend', function(e) {
@@ -440,4 +551,4 @@
     });
   </script>
 </body>
-</html>
+  </html>
