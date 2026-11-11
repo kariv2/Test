@@ -4,10 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>About You - The 1975</title>
-  <!-- Google Fonts for Classic Nostalgic Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -22,67 +21,20 @@
       -webkit-user-select: none;
     }
 
-    /* ==========================================================
-       1. SAD & CLASSIC CHANGING WINTER SCENES
-       ========================================================== */
-    .scene-layer {
-      position: fixed;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 2.0s ease-in-out;
-      z-index: 1;
-      pointer-events: none;
-    }
-    .scene-layer.active {
-      opacity: 1;
-    }
-
-    /* Scene 1: Lonely Streetlamp in Silent Cold Darkness (0:00 - 0:08) */
-    #scene-1 {
-      background: radial-gradient(circle at 45% 45%, #1a1e28 0%, #0d1017 55%, #040508 100%);
-    }
-
-    /* Scene 2: Frozen Bare Trees in Snow (0:08 - 0:19) */
-    #scene-2 {
-      background: radial-gradient(circle at 50% 60%, #151922 0%, #0a0d13 55%, #030406 100%);
-    }
-
-    /* Scene 3: Distant Walking Silhouettes Lost in Snow (0:19 - 0:21) */
-    #scene-3 {
-      background: radial-gradient(circle at 50% 50%, #171b24 0%, #0c0e14 60%, #030406 100%);
-    }
-
-    /* Scene 4: Unreachable Warm Window Across the Street (0:21 - 0:34) */
-    #scene-4 {
-      background: radial-gradient(circle at 50% 40%, #292119 0%, #120e0b 55%, #050403 100%);
-    }
-
-    /* Scene 5: Solitary Snow Bench Under a Dim Lamp (0:35 - 0:39) */
-    #scene-5 {
-      background: radial-gradient(circle at 40% 55%, #1a1e29 0%, #0b0e14 55%, #030407 100%);
-    }
-
-    .scene-svg {
-      position: absolute;
-      inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-
-    /* 2. REALISTIC SLOW-FALLING CANVAS SNOW */
+    /* 1. CANVAS: LONELY STREETLAMP & HEAVY MULTI-LAYER SNOW */
     #snow-canvas {
       position: fixed;
       inset: 0;
       width: 100vw; height: 100vh;
-      z-index: 5;
-      pointer-events: none;
+      z-index: 1;
+      background: radial-gradient(circle at 45% 45%, #181d28 0%, #0d1017 55%, #040508 100%);
     }
 
-    /* 3. VINTAGE 16MM NOSTALGIC FILM GRAIN & VIGNETTE */
+    /* 2. VINTAGE 16MM FILM GRAIN & AMBER VIGNETTE */
     #film-overlay {
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(10, 15, 25, 0.1) 0%, rgba(3, 4, 7, 0.78) 100%);
+      background: radial-gradient(circle at 50% 50%, rgba(10, 15, 25, 0.08) 0%, rgba(3, 4, 7, 0.78) 100%);
       pointer-events: none;
       z-index: 10;
     }
@@ -90,20 +42,33 @@
     #film-grain {
       position: fixed;
       inset: 0;
-      opacity: 0.16;
+      opacity: 0.15;
       pointer-events: none;
       z-index: 11;
       background-image: repeating-radial-gradient(circle, #fff 0, transparent 1px, transparent 4px);
       background-size: 5px 5px;
-      animation: grainFlicker 0.15s infinite;
+      animation: flicker 0.15s infinite;
     }
-    @keyframes grainFlicker {
-      0% { opacity: 0.13; }
-      50% { opacity: 0.18; }
-      100% { opacity: 0.14; }
+    @keyframes flicker {
+      0% { opacity: 0.12; }
+      50% { opacity: 0.17; }
+      100% { opacity: 0.13; }
     }
 
-    /* 4. CLASSIC MELANCHOLIC SERIF TYPOGRAPHY */
+    .letterbox {
+      position: fixed;
+      left: 0; width: 100vw;
+      height: 4.5vh;
+      background: #000;
+      z-index: 20;
+      pointer-events: none;
+    }
+    .lb-top { top: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+    .lb-bottom { bottom: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+
+    /* ==========================================================
+       3. CLASSIC SAD SERIF TYPOGRAPHY (CORMORANT GARAMOND)
+       ========================================================== */
     #lyric-container {
       position: fixed;
       inset: 0;
@@ -123,7 +88,7 @@
     }
 
     .lyric-text {
-      color: #dbe0ea; /* Faded, melancholic silver-white */
+      color: #dbe0ea; /* Faded, sorrowful ash-silver */
       font-family: 'Cormorant Garamond', 'Georgia', serif;
       font-size: clamp(23px, 3.6vw, 36px);
       font-weight: 400;
@@ -135,7 +100,7 @@
         0 2px 14px rgba(0, 0, 0, 0.95),
         0 0 25px rgba(200, 215, 240, 0.25);
       opacity: 0;
-      animation: sadFade 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: sadFade 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       will-change: opacity, transform;
     }
 
@@ -152,19 +117,22 @@
       }
     }
 
-    /* 5. START SCREEN */
+    /* ==========================================================
+       4. 100% UNFAILING START SCREEN (DIRECT TAP SUPPORT)
+       ========================================================== */
     #start-screen {
       position: fixed !important;
       inset: 0 !important;
-      background: rgba(4, 6, 10, 0.95) !important;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      background: rgba(4, 6, 10, 0.94) !important;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       color: #e2e8f0;
-      z-index: 99999 !important;
+      z-index: 999999 !important;
+      cursor: pointer;
       pointer-events: auto !important;
     }
 
@@ -186,13 +154,13 @@
       letter-spacing: 0.02em;
       background: linear-gradient(135deg, #2b3345, #141822);
       color: #e2e8f0;
-      border: 1px solid rgba(210, 225, 255, 0.3);
+      border: 1px solid rgba(210, 225, 255, 0.35);
       border-radius: 35px;
       cursor: pointer;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-      transition: transform 0.15s ease;
+      pointer-events: auto !important;
     }
     #start-btn:active { transform: scale(0.96); }
 
@@ -233,267 +201,97 @@
     }
   </style>
 </head>
-<body>
+<body onclick="startExperience()">
 
-  <!-- Media Player: Will connect to whichever filename exists in your GitHub repo -->
-  <video id="song-player" playsinline webkit-playsinline loop preload="auto"></video>
+  <!-- Media Player with your uploaded mp4 files -->
+  <video id="song-player" playsinline webkit-playsinline loop preload="auto">
+    <source src="snaptik_7635591509277986068_v3.mp4" type="video/mp4">
+    <source src="aboutyou.mp4" type="video/mp4">
+    <source src="music.mp4" type="video/mp4">
+  </video>
 
-  <!-- ============================================================== -->
-  <!-- SAD & CLASSIC WINTER NIGHT SCENES                             -->
-  <!-- ============================================================== -->
-  <!-- Scene 1: Solitary Streetlamp in the Dark Snow (0:00 - 0:08) -->
-  <div class="scene-layer active" id="scene-1">
-    <svg class="scene-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
-      <!-- Solitary Victorian Lamppost -->
-      <path d="M 440,600 L 444,220 L 434,220 L 434,200 L 454,200 L 454,220 L 448,220 L 452,600 Z" fill="#040508"/>
-      <!-- Soft pale amber light cone -->
-      <polygon points="446,200 240,600 650,600" fill="url(#lampCone)" opacity="0.32"/>
-      <ellipse cx="446" cy="550" rx="190" ry="40" fill="#2d291e" opacity="0.5"/>
-      <defs>
-        <linearGradient id="lampCone" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#ffdc99" stop-opacity="0.8"/>
-          <stop offset="100%" stop-color="#14110b" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-    </svg>
-  </div>
+  <div class="letterbox lb-top"></div>
+  <div class="letterbox lb-bottom"></div>
 
-  <!-- Scene 2: Bare Frozen Weeping Trees (0:08 - 0:19) -->
-  <div class="scene-layer" id="scene-2">
-    <svg class="scene-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
-      <!-- Frozen drooping branches -->
-      <path d="M 180,600 C 190,400 200,280 220,180 C 230,130 270,70 320,30 M 220,180 C 180,140 130,90 80,60 M 200,280 C 140,240 100,190 50,150" stroke="#040507" stroke-width="12" fill="none" stroke-linecap="round"/>
-      <ellipse cx="500" cy="560" rx="500" ry="70" fill="#090d14" opacity="0.8"/>
-    </svg>
-  </div>
-
-  <!-- Scene 3: Distant Silhouettes Walking in the Night (0:19 - 0:21) -->
-  <div class="scene-layer" id="scene-3">
-    <svg class="scene-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
-      <!-- Dark snowy path fading into fog -->
-      <path d="M 0,600 L 420,290 L 580,290 L 1000,600 Z" fill="#090c12"/>
-      <!-- Distant small silhouettes walking away -->
-      <circle cx="490" cy="360" r="10" fill="#030406"/>
-      <path d="M 480,370 L 500,370 L 504,420 L 476,420 Z" fill="#030406"/>
-      <circle cx="514" cy="365" r="9" fill="#030406"/>
-      <path d="M 506,374 L 522,374 L 526,420 L 502,420 Z" fill="#030406"/>
-    </svg>
-  </div>
-
-  <!-- Scene 4: Unreachable Warm Window Across the Street (0:21 - 0:34) -->
-  <div class="scene-layer" id="scene-4">
-    <svg class="scene-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
-      <!-- Distant dark house with soft warm glowing window -->
-      <rect x="280" y="80" width="440" height="420" rx="6" fill="#050403" stroke="#0b0806" stroke-width="20"/>
-      <!-- Warm nostalgic window panes -->
-      <rect x="310" y="110" width="380" height="360" fill="#2d1b0c" opacity="0.85"/>
-      <line x1="500" y1="110" x2="500" y2="470" stroke="#050403" stroke-width="14"/>
-      <line x1="310" y1="280" x2="690" y2="280" stroke="#050403" stroke-width="12"/>
-      <!-- Paper star cutouts on glass -->
-      <polygon points="400,160 405,175 420,175 408,184 412,198 400,189 388,198 392,184 380,175 395,175" fill="#ffd499" opacity="0.75"/>
-      <polygon points="600,340 604,352 616,352 606,360 610,372 600,364 590,372 594,360 584,352 596,352" fill="#ffd499" opacity="0.75"/>
-    </svg>
-  </div>
-
-  <!-- Scene 5: Empty Snow Bench (0:35 - 0:39) -->
-  <div class="scene-layer" id="scene-5">
-    <svg class="scene-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
-      <!-- Empty snowy park bench in the dark -->
-      <path d="M 360,460 L 640,460 L 640,474 L 360,474 Z M 390,474 L 390,530 M 610,474 L 610,530" stroke="#05070a" stroke-width="8" fill="#080c13"/>
-      <!-- Snow gathered on top of bench -->
-      <path d="M 358,458 Q 500,450 642,458" stroke="#cbd5e1" stroke-width="6" fill="none" opacity="0.7"/>
-    </svg>
-  </div>
-
-  <!-- Snow Canvas -->
+  <!-- Canvas Scene: Solitary Victorian Lamppost & Heavy Snow -->
   <canvas id="snow-canvas"></canvas>
   <div id="film-overlay"></div>
   <div id="film-grain"></div>
 
-  <!-- Center Minimalist Typography -->
+  <!-- Center Classic Serif Typography -->
   <div id="lyric-container">
     <div class="lyric-box" id="lyric-box"></div>
   </div>
 
-  <!-- Start Screen -->
-  <div id="start-screen">
-    <div class="btn-group">
-      <button id="start-btn">▶ play winter night</button>
-      
-      <!-- Upload/Pick video directly if filename is different on GitHub -->
+  <!-- Start Screen with direct inline click and touch handlers -->
+  <div id="start-screen" onclick="startExperience()">
+    <div class="btn-group" onclick="event.stopPropagation()">
+      <button id="start-btn" onclick="startExperience()" ontouchend="startExperience()">
+        ▶ play winter night
+      </button>
       <div class="upload-container">
         <span id="upload-label">📁 or choose video from iPad</span>
         <input type="file" id="media-input" accept="video/*,audio/*" onchange="handleMediaUpload(this)">
       </div>
     </div>
-    <p class="subtitle" id="status-text">(checking audio files in repository...)</p>
+    <p class="subtitle" id="status-text">(tap button or anywhere to start)</p>
   </div>
 
   <script>
     // ==============================================================
-    // 1. SMART AUDIO FINDER: CHECKS YOUR GITHUB MP4 FILES
+    // 1. FAIL-SAFE START ENGINE (CANNOT FREEZE)
     // ==============================================================
-    const CANDIDATE_FILES = [
-      'aboutyou.mp4',
-      'music.mp4',
-      'video.mp4',
-      'snaptik_7635591509277986068_v3.mp4',
-      'f12117c668798929d30d9a1344321ba7.mp4'
-    ];
+    let hasStarted = false;
+    let syncTimer = null;
+    let lastRenderedLyric = -1;
 
-    const player = document.getElementById('song-player');
-    const statusText = document.getElementById('status-text');
+    function startExperience() {
+      if (hasStarted) return;
+      hasStarted = true;
 
-    // Automatically locate which mp4 exists in your repository
-    async function resolveAudioSource() {
-      for (let filename of CANDIDATE_FILES) {
-        try {
-          const res = await fetch(filename, { method: 'HEAD' });
-          if (res.ok) {
-            player.src = filename;
-            player.load();
-            statusText.innerText = `✓ connected to "${filename}"`;
-            return;
-          }
-        } catch (e) {}
-      }
-      // Default fallback
-      player.src = CANDIDATE_FILES[0];
-      statusText.innerText = "(turn up volume for music & snow)";
-    }
-    resolveAudioSource();
+      const screen = document.getElementById('start-screen');
+      if (screen) screen.style.display = 'none';
 
-    // ==============================================================
-    // 2. CANVAS: SLOW, SAD & HEAVY FALLING SNOW
-    // ==============================================================
-    const canvas = document.getElementById('snow-canvas');
-    const ctx = canvas.getContext('2d');
-    let width, height;
+      const player = document.getElementById('song-player');
+      player.muted = false;
+      player.loop = true;
+      player.play().catch(e => console.log("Audio waiting on gesture:", e));
 
-    let bokehs = [];
-    let snowflakes = [];
-    let foregroundBokehFlakes = [];
+      const clockStart = performance.now();
 
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      initScene();
+      // Dual-Sync Clock (Locks to audio time, with timer fallback)
+      syncTimer = setInterval(() => {
+        let curTime = 0;
+        if (!player.paused && player.currentTime > 0) {
+          curTime = player.currentTime;
+        } else {
+          curTime = (performance.now() - clockStart) / 1000;
+        }
+
+        updateLyrics(curTime);
+
+        // Seamless Loop every 39.5s
+        if (curTime >= 39.5) {
+          lastRenderedLyric = -1;
+          player.currentTime = 0;
+          player.play().catch(() => {});
+        }
+      }, 30);
     }
 
-    function initScene() {
-      // Soft, lonely streetlamp bokeh in the dark
-      bokehs = [];
-      const bokehColors = ['rgba(235, 185, 120, ', 'rgba(180, 195, 220, ', 'rgba(210, 160, 90, '];
-      for (let i = 0; i < 18; i++) {
-        bokehs.push({
-          x: Math.random() * width,
-          y: height * 0.35 + Math.random() * (height * 0.55),
-          r: Math.random() * 50 + 22,
-          color: bokehColors[Math.floor(Math.random() * bokehColors.length)],
-          alpha: Math.random() * 0.18 + 0.08,
-          drift: (Math.random() - 0.5) * 0.2,
-          pulse: Math.random() * Math.PI
-        });
-      }
-
-      // Slow, quiet falling snowflakes
-      snowflakes = [];
-      for (let i = 0; i < Math.floor(width * 0.3); i++) {
-        snowflakes.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          r: Math.random() * 2.4 + 0.8,
-          speed: Math.random() * 1.2 + 0.8, // Slower, sorrowful drift
-          wind: Math.random() * 0.6 - 0.15,
-          alpha: Math.random() * 0.6 + 0.25,
-          swing: Math.random() * Math.PI
-        });
-      }
-
-      // Large blurry foreground bokeh snowflakes
-      foregroundBokehFlakes = [];
-      for (let i = 0; i < 14; i++) {
-        foregroundBokehFlakes.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          r: Math.random() * 24 + 14,
-          speed: Math.random() * 2.4 + 1.6,
-          wind: Math.random() * 0.9 + 0.2,
-          alpha: Math.random() * 0.28 + 0.12
-        });
+    function handleMediaUpload(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const player = document.getElementById('song-player');
+        player.src = URL.createObjectURL(file);
+        player.load();
+        document.getElementById('upload-label').innerText = "✓ video connected!";
+        document.getElementById('status-text').innerText = "ready! tap play now.";
       }
     }
 
-    function drawScene() {
-      ctx.clearRect(0, 0, width, height);
-
-      // Bokeh lights
-      bokehs.forEach(b => {
-        b.x += b.drift;
-        b.pulse += 0.012;
-        const currentAlpha = b.alpha + Math.sin(b.pulse) * 0.04;
-        const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
-        grad.addColorStop(0, b.color + currentAlpha + ')');
-        grad.addColorStop(1, b.color + '0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fill();
-
-        if (b.x < -b.r) b.x = width + b.r;
-        if (b.x > width + b.r) b.x = -b.r;
-      });
-
-      // Snowflakes
-      snowflakes.forEach(s => {
-        s.swing += 0.018;
-        s.y += s.speed;
-        s.x += s.wind + Math.sin(s.swing) * 0.35;
-
-        ctx.fillStyle = `rgba(220, 230, 245, ${s.alpha})`;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
-
-        if (s.y > height) { s.y = -s.r; s.x = Math.random() * width; }
-      });
-
-      // Foreground bokeh flakes
-      foregroundBokehFlakes.forEach(f => {
-        f.y += f.speed;
-        f.x += f.wind;
-        const grad = ctx.createRadialGradient(f.x, f.y, f.r * 0.2, f.x, f.y, f.r);
-        grad.addColorStop(0, `rgba(240, 245, 255, ${f.alpha})`);
-        grad.addColorStop(0.7, `rgba(220, 230, 245, ${f.alpha * 0.5})`);
-        grad.addColorStop(1, 'rgba(220, 230, 245, 0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-        ctx.fill();
-
-        if (f.y > height + f.r) { f.y = -f.r; f.x = Math.random() * width; }
-      });
-
-      requestAnimationFrame(drawScene);
-    }
-
-    window.addEventListener('resize', resize);
-    resize();
-    drawScene();
-
     // ==============================================================
-    // 3. BACKGROUND SCENE CUTS (SYNCHRONIZED TO THE SONG)
-    // ==============================================================
-    const SCENE_CUES = [
-      { time: 0.0,  id: 'scene-1' }, // Lonely Lamppost
-      { time: 8.5,  id: 'scene-2' }, // Frozen Bare Trees
-      { time: 19.0, id: 'scene-3' }, // Distant Silhouettes Walking
-      { time: 21.0, id: 'scene-4' }, // Unreachable Warm Window
-      { time: 35.0, id: 'scene-5' }  // Empty Park Bench in Snow
-    ];
-
-    // ==============================================================
-    // 4. TIMED LYRICS ("ABOUT YOU" - THE 1975)
+    // 2. TIMED LYRICS ("ABOUT YOU" - THE 1975)
     // ==============================================================
     const TIMED_LYRICS = [
       { time: 0.2,  text: "we get married" },
@@ -505,69 +303,6 @@
       { time: 30.2, text: "do you think i have forgotten" },
       { time: 35.2, text: "do you think i have forgotten about you?" }
     ];
-
-    let hasStarted = false;
-    let syncTimer = null;
-    let lastRenderedLyric = -1;
-    let lastActiveScene = null;
-
-    function handleMediaUpload(input) {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        player.src = URL.createObjectURL(file);
-        player.load();
-        document.getElementById('upload-label').innerText = "✓ video connected!";
-        statusText.innerText = "ready! tap 'play winter night' now.";
-      }
-    }
-
-    function startExperience() {
-      if (hasStarted) return;
-      hasStarted = true;
-
-      document.getElementById('start-screen').style.display = 'none';
-
-      player.muted = false;
-      player.loop = true;
-      player.play().catch(e => console.log("Audio waiting on gesture:", e));
-
-      const clockStart = performance.now();
-
-      syncTimer = setInterval(() => {
-        let curTime = 0;
-        if (!player.paused && player.currentTime > 0) {
-          curTime = player.currentTime;
-        } else {
-          curTime = (performance.now() - clockStart) / 1000;
-        }
-
-        updateBackgroundScene(curTime);
-        updateLyrics(curTime);
-
-        if (curTime >= 39.5) {
-          lastRenderedLyric = -1;
-          lastActiveScene = null;
-          player.currentTime = 0;
-          player.play().catch(() => {});
-        }
-      }, 30);
-    }
-
-    function updateBackgroundScene(time) {
-      let targetScene = SCENE_CUES[0].id;
-      for (let i = 0; i < SCENE_CUES.length; i++) {
-        if (time >= SCENE_CUES[i].time) {
-          targetScene = SCENE_CUES[i].id;
-        }
-      }
-
-      if (targetScene !== lastActiveScene) {
-        lastActiveScene = targetScene;
-        document.querySelectorAll('.scene-layer').forEach(el => el.classList.remove('active'));
-        const activeEl = document.getElementById(targetScene);
-        if (activeEl) activeEl.classList.add('active');
-      }
-    }
 
     function updateLyrics(time) {
       const box = document.getElementById('lyric-box');
@@ -584,5 +319,132 @@
       }
     }
 
-    const startBtn = document.getElementById('start-btn');
-    startBtn.addEventListene
+    // ==============================================================
+    // 3. CANVAS: SAD WINTER NIGHT & HEAVY FALLING SNOW
+    // ==============================================================
+    const canvas = document.getElementById('snow-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    let bokehs = [];
+    let snowflakes = [];
+    let foregroundBokehFlakes = [];
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      initScene();
+    }
+
+    function initScene() {
+      // Lonely streetlamp bokeh
+      bokehs = [];
+      const colors = ['rgba(235, 185, 120, ', 'rgba(180, 195, 220, ', 'rgba(210, 160, 90, '];
+      for (let i = 0; i < 16; i++) {
+        bokehs.push({
+          x: Math.random() * width,
+          y: height * 0.35 + Math.random() * (height * 0.55),
+          r: Math.random() * 50 + 22,
+          c: colors[Math.floor(Math.random() * colors.length)],
+          a: Math.random() * 0.18 + 0.08,
+          dx: (Math.random() - 0.5) * 0.2,
+          p: Math.random() * Math.PI
+        });
+      }
+
+      // Slow sorrowful snowfall
+      snowflakes = [];
+      for (let i = 0; i < Math.floor(width * 0.3); i++) {
+        snowflakes.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 2.4 + 0.8,
+          s: Math.random() * 1.2 + 0.8,
+          w: Math.random() * 0.6 - 0.15,
+          a: Math.random() * 0.6 + 0.25,
+          sw: Math.random() * Math.PI
+        });
+      }
+
+      // Huge blurry foreground bokeh flakes
+      foregroundBokehFlakes = [];
+      for (let i = 0; i < 14; i++) {
+        foregroundBokehFlakes.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 24 + 14,
+          s: Math.random() * 2.4 + 1.6,
+          w: Math.random() * 0.9 + 0.2,
+          a: Math.random() * 0.28 + 0.12
+        });
+      }
+    }
+
+    function drawScene() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Lamppost light cone
+      const lampX = width * 0.25;
+      const lampGrad = ctx.createRadialGradient(lampX, height * 0.35, 10, lampX, height * 0.55, 240);
+      lampGrad.addColorStop(0, 'rgba(255, 215, 140, 0.28)');
+      lampGrad.addColorStop(1, 'rgba(255, 215, 140, 0)');
+      ctx.fillStyle = lampGrad;
+      ctx.fillRect(lampX - 250, height * 0.2, 500, height * 0.8);
+
+      // Lamppost Silhouette
+      ctx.fillStyle = '#030406';
+      ctx.fillRect(lampX - 3, height * 0.35, 6, height * 0.65);
+      ctx.fillRect(lampX - 14, height * 0.33, 28, 12);
+
+      // Soft bokeh
+      bokehs.forEach(b => {
+        b.x += b.dx;
+        b.p += 0.012;
+        const alpha = b.a + Math.sin(b.p) * 0.04;
+        const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+        grad.addColorStop(0, b.c + alpha + ')');
+        grad.addColorStop(1, b.c + '0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        ctx.fill();
+        if (b.x < -b.r) b.x = width + b.r;
+        if (b.x > width + b.r) b.x = -b.r;
+      });
+
+      // Regular Snow
+      snowflakes.forEach(s => {
+        s.sw += 0.018;
+        s.y += s.s;
+        s.x += s.w + Math.sin(s.sw) * 0.35;
+        ctx.fillStyle = `rgba(220, 230, 245, ${s.a})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+        if (s.y > height) { s.y = -s.r; s.x = Math.random() * width; }
+      });
+
+      // Foreground Bokeh Flakes
+      foregroundBokehFlakes.forEach(f => {
+        f.y += f.s;
+        f.x += f.w;
+        const grad = ctx.createRadialGradient(f.x, f.y, f.r * 0.2, f.x, f.y, f.r);
+        grad.addColorStop(0, `rgba(240, 245, 255, ${f.a})`);
+        grad.addColorStop(0.7, `rgba(220, 230, 245, ${f.a * 0.5})`);
+        grad.addColorStop(1, 'rgba(220, 230, 245, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fill();
+        if (f.y > height + f.r) { f.y = -f.r; f.x = Math.random() * width; }
+      });
+
+      requestAnimationFrame(drawScene);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    drawScene();
+  </script>
+</body>
+</html>
