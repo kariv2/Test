@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>About You - The 1975</title>
+  <!-- Google Fonts for Modern Minimalist Aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body, html {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #120d08;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* 1. HTML5 CANVAS: WARM GOLDEN NIGHT & MULTI-LAYER SNOW */
+    #snow-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 1;
+      background: radial-gradient(circle at 50% 65%, #2e2012 0%, #150f08 60%, #0a0704 100%);
+    }
+
+    /* 2. VINTAGE NOSTALGIC FILM GRAIN & AMBER VIGNETTE */
+    #film-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 180, 80, 0.08) 0%, rgba(20, 12, 5, 0.65) 100%);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    #film-grain {
+      position: fixed;
+      inset: 0;
+      opacity: 0.14;
+      pointer-events: none;
+      z-index: 11;
+      background-image: repeating-radial-gradient(circle, #fff 0, transparent 1px, transparent 4px);
+      background-size: 5px 5px;
+      animation: grainFlicker 0.15s infinite;
+    }
+    @keyframes grainFlicker {
+      0% { opacity: 0.12; }
+      50% { opacity: 0.17; }
+      100% { opacity: 0.13; }
+    }
+
+    /* 3. MINIMALIST CENTERED WHITE TYPOGRAPHY */
+    #lyric-container {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      pointer-events: none;
+      padding: 0 24px;
+    }
+
+    .lyric-box {
+      text-align: center;
+      max-width: min(90vw, 750px);
+      min-height: 80px;
+    }
+
+    .lyric-text {
+      color: #ffffff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(20px, 3.2vw, 32px);
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: -0.015em;
+      text-align: center;
+      /* Soft drop-shadow for contrast over bright snow spots */
+      text-shadow: 
+        0 2px 14px rgba(0, 0, 0, 0.85),
+        0 0 20px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      transform: scale(0.97);
+      animation: lyricFade 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: opacity, transform;
+    }
+
+    @keyframes lyricFade {
+      0% {
+        opacity: 0;
+        transform: scale(0.96) translateY(4px);
+      }
+      100% {
+        opacity: 0.96;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* 4. TAPPABLE START OVERLAY (IPAD SAFARI COMPLIANT) */
+    #start-screen {
+      position: fixed !important;
+      inset: 0 !important;
+      background: rgba(14, 10, 6, 0.92) !important;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff4e6;
+      z-index: 99999 !important;
+      pointer-events: auto !important;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    #start-btn {
+      width: 100%;
+      padding: 18px 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      background: linear-gradient(135deg, #e6a86c, #c97d3b);
+      color: #1a0f05;
+      border: 1px solid rgba(255, 235, 210, 0.85);
+      border-radius: 35px;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(230, 168, 108, 0.45);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.15s ease;
+    }
+    #start-btn:active { transform: scale(0.96); }
+
+    .upload-container {
+      position: relative;
+      width: 100%;
+      padding: 12px 20px;
+      font-size: 13.5px;
+      color: #d1b89d;
+      background: rgba(45, 30, 18, 0.6);
+      border: 1px dashed rgba(230, 168, 108, 0.5);
+      border-radius: 25px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .upload-container input[type="file"] {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .subtitle {
+      margin-top: 14px;
+      opacity: 0.65;
+      font-size: 13.5px;
+    }
+
+    #song-player {
+      position: fixed;
+      bottom: 10px; right: 10px;
+      width: 2px; height: 2px;
+      opacity: 0.01;
+      pointer-events: none;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hidden Looping Audio/Video Player -->
+  <video id="song-player" playsinline webkit-playsinline loop preload="auto">
+    <source src="winter.mp4" type="video/mp4">
+    <source src="snaptik_7635591509277986068_v3.mp4" type="video/mp4">
+  </video>
+
+  <!-- Canvas for Snowy Bokeh Scene -->
+  <canvas id="snow-canvas"></canvas>
+  <div id="film-overlay"></div>
+  <div id="film-grain"></div>
+
+  <!-- Center Minimalist Lyrics -->
+  <div id="lyric-container">
+    <div class="lyric-box" id="lyric-box"></div>
+  </div>
+
+  <!-- Start Screen -->
+  <div id="start-screen">
+    <div class="btn-group">
+      <button id="start-btn">▶ play winter night</button>
+      
+      <!-- Pick this TikTok video clip directly if not yet uploaded -->
+      <div class="upload-container">
+        <span id="upload-label">📁 choose video from iPad</span>
+        <input type="file" id="media-input" accept="video/*,audio/*" onchange="handleMediaUpload(this)">
+      </div>
+    </div>
+    <p class="subtitle" id="status-text">(turn sound up for music & snow)</p>
+  </div>
+
+  <script>
+    // ==============================================================
+    // 1. CANVAS: COZY GOLDEN AMBIENCE & MULTI-LAYER SNOW ENGINE
+    // ==============================================================
+    const canvas = document.getElementById('snow-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    let bokehs = [];
+    let snowflakes = [];
+    let foregroundBokehFlakes = [];
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      initScene();
+    }
+
+    function initScene() {
+      // 1. Warm Streetlamp & Holiday Light Bokeh
+      bokehs = [];
+      const bokehColors = [
+        'rgba(255, 195, 110, ', // Warm Amber Streetlamp
+        'rgba(255, 150, 60, ',  // Golden Lantern
+        'rgba(255, 220, 160, ', // Soft Warm White
+        'rgba(255, 120, 50, '   // Holiday Glow
+      ];
+      for (let i = 0; i < 22; i++) {
+        bokehs.push({
+          x: Math.random() * width,
+          y: height * 0.35 + Math.random() * (height * 0.55),
+          r: Math.random() * 55 + 25,
+          color: bokehColors[Math.floor(Math.random() * bokehColors.length)],
+          alpha: Math.random() * 0.28 + 0.12,
+          drift: (Math.random() - 0.5) * 0.25,
+          pulse: Math.random() * Math.PI
+        });
+      }
+
+      // 2. Regular Falling Snow (Midground & Background)
+      snowflakes = [];
+      const snowCount = Math.floor(width * 0.35);
+      for (let i = 0; i < snowCount; i++) {
+        snowflakes.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 2.8 + 1.0,
+          speed: Math.random() * 1.8 + 1.2,
+          wind: Math.random() * 0.8 - 0.2,
+          alpha: Math.random() * 0.7 + 0.3,
+          swing: Math.random() * Math.PI
+        });
+      }
+
+      // 3. Huge Out-Of-Focus Foreground Bokeh Snowflakes (Just like video!)
+      foregroundBokehFlakes = [];
+      for (let i = 0; i < 16; i++) {
+        foregroundBokehFlakes.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 26 + 14, // Large blurry discs
+          speed: Math.random() * 3.5 + 2.5,
+          wind: Math.random() * 1.2 + 0.3,
+          alpha: Math.random() * 0.35 + 0.15
+        });
+      }
+    }
+
+    function drawScene() {
+      ctx.clearRect(0, 0, width, height);
+
+      // --- LAYER 1: WARM STREETLIGHT BOKEH GLOWS ---
+      bokehs.forEach(b => {
+        b.x += b.drift;
+        b.pulse += 0.015;
+        const currentAlpha = b.alpha + Math.sin(b.pulse) * 0.06;
+
+        const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+        grad.addColorStop(0, b.color + currentAlpha + ')');
+        grad.addColorStop(1, b.color + '0)');
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (b.x < -b.r) b.x = width + b.r;
+        if (b.x > width + b.r) b.x = -b.r;
+      });
+
+      // --- LAYER 2: FALLING FLUFFY SNOWFLAKES ---
+      snowflakes.forEach(s => {
+        s.swing += 0.02;
+        s.y += s.speed;
+        s.x += s.wind + Math.sin(s.swing) * 0.4;
+
+        ctx.fillStyle = `rgba(255, 250, 240, ${s.alpha})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (s.y > height) {
+          s.y = -s.r;
+          s.x = Math.random() * width;
+        }
+      });
+
+      // --- LAYER 3: BLURRED FOREGROUND BOKEH FLAKES (CINEMATIC) ---
+      foregroundBokehFlakes.forEach(f => {
+        f.y += f.speed;
+        f.x += f.wind;
+
+        const grad = ctx.createRadialGradient(f.x, f.y, f.r * 0.2, f.x, f.y, f.r);
+        grad.addColorStop(0, `rgba(255, 255, 255, ${f.alpha})`);
+        grad.addColorStop(0.7, `rgba(255, 245, 230, ${f.alpha * 0.6})`);
+        grad.addColorStop(1, 'rgba(255, 245, 230, 0)');
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (f.y > height + f.r) {
+          f.y = -f.r;
+          f.x = Math.random() * width;
+        }
+      });
+
+      requestAnimationFrame(drawScene);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    drawScene();
+
+    // ==============================================================
+    // 2. TIMED LYRICS ("ABOUT YOU" - THE 1975)
+    // ==============================================================
+    const TIMED_LYRICS = [
+      { time: 0.1,  text: "we get married" },
+      { time: 2.2,  text: "we get married" },
+      { time: 4.8,  text: "we get married in our heads" },
+      { time: 10.4, text: "something to do while we try to recall how we met" },
+      { time: 20.2, text: "do you think i have forgotten?" },
+      { time: 25.2, text: "do you think i have forgotten?" },
+      { time: 30.2, text: "do you think i have forgotten" },
+      { time: 35.2, text: "do you think i have forgotten about you?" }
+    ];
+
+    let hasStarted = false;
+    let syncTimer = null;
+    let lastRenderedIndex = -1;
+
+    // Direct iPad Video/Audio Picker Handler
+    function handleMediaUpload(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const player = document.getElementById('song-player');
+        player.src = URL.createObjectURL(file);
+        player.load();
+        document.getElementById('upload-label').innerText = "✓ video connected!";
+        document.getElementById('status-text').innerText = "ready! tap 'play winter night' now.";
+      }
+    }
+
+    function startExperience() {
+      if (hasStarted) return;
+      hasStarted = true;
+
+      const screen = document.getElementById('start-screen');
+      if (screen) screen.style.display = 'none';
+
+      const player = document.getElementById('song-player');
+      player.muted = false;
+      player.loop = true;
+      player.play().catch(e => console.log("Audio play gesture:", e));
+
+      const clockStart = performance.now();
+
+      // Audio-synced timer (Runs every 30ms for zero drift)
+      syncTimer = setInterval(() => {
+        let curTime = 0;
+        if (!player.paused && player.currentTime > 0) {
+          curTime = player.currentTime;
+        } else {
+          curTime = (performance.now() - clockStart) / 1000;
+        }
+
+        handleLyricsSync(curTime);
+
+        // Loop after 39.5s
+        if (curTime >= 39.5) {
+          lastRenderedIndex = -1;
+          player.currentTime = 0;
+          player.play().catch(() => {});
+        }
+      }, 30);
+    }
+
+    function handleLyricsSync(currentTime) {
+      const box = document.getElementById('lyric-box');
+      
+      // Find the current active lyric line
+      let activeIndex = -1;
+      for (let i = 0; i < TIMED_LYRICS.length; i++) {
+        if (currentTime >= TIMED_LYRICS[i].time) {
+          activeIndex = i;
+        }
+      }
+
+      if (activeIndex !== -1 && activeIndex !== lastRenderedIndex) {
+        lastRenderedIndex = activeIndex;
+        box.innerHTML = `<div class="lyric-text">${TIMED_LYRICS[activeIndex].text}</div>`;
+      }
+    }
+
+    // Direct iPad Touch Event Listeners
+    const startBtn = document.getElementById('start-btn');
+    startBtn.addEventListener('click', startExperience);
+    startBtn.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      startExperience();
+    });
+  </script>
+</body>
+</html>
